@@ -6,11 +6,6 @@ public class OpenAIKey implements ServiceKey {
 
 	@Override
 	public String getAPIKey() {
-		Dotenv dotenv = Dotenv.configure()
-			.directory("./")
-			.filename(".env")
-			.load();
-
-		return dotenv.get("OPENAI_KEY");
+		return System.getenv().get("OPENAI_KEY");
 	}
 }
