@@ -13,7 +13,7 @@ public class ChatGPTService implements ChatService {
 
 	private OpenAiService service;
 	private Prompt prompt;
-	private final String MODEL = "gpt-3.5-turbo";
+	private final String MODEL = "gpt-4-1106-preview";
 	private final String SYSTEM = "system";
 	private final String USER = "user";
 
