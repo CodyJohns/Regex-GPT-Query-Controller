@@ -13,9 +13,14 @@ public class RegexController {
     private Gson gson;
     private ChatService service;
 
+    private String str = "Respond with only a syntactically correct regex for the following request. " +
+                         "Do not not include any code formatting. " +
+                         "If the request is for regex to replace occurrences then " +
+                         "just provide the regex to remove and not to replace.";
+
     public RegexController() {
         gson = new Gson();
-        Prompt prompt = new ChatGPTPrompt("Respond with only a syntactically correct regex for the following request. ");
+        Prompt prompt = new ChatGPTPrompt(str);
         service = new ChatGPTService(new OpenAIKey(), prompt);
     }
 

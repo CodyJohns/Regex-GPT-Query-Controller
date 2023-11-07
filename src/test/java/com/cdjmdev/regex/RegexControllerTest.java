@@ -23,4 +23,16 @@ public class RegexControllerTest {
         assertNotNull(result);
     }
 
+    @Test
+    public void shouldReturnRegex2() {
+        testing.givenEvent()
+            .withBody("Replace all a with bb")
+            .enqueue();
+
+        testing.thenRun(RegexController.class, "handleRequest");
+
+        FnResult result = testing.getOnlyResult();
+        System.out.println(result.getBodyAsString());
+        assertNotNull(result);
+    }
 }
