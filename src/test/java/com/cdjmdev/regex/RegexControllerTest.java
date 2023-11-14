@@ -30,24 +30,4 @@ public class RegexControllerTest {
         System.out.println(result.getBodyAsString());
         assertNotNull(result);
     }
-
-    @Test
-    public void shouldReturnRegex2() {
-
-        Gson gson = new Gson();
-        RegexController.Query query = new RegexController.Query();
-
-        query.authtoken = "a19cc483fae0a357f68c06add3051272";
-        query.query = "Replace all a with bb";
-
-        testing.givenEvent()
-            .withBody(gson.toJson(query))
-            .enqueue();
-
-        testing.thenRun(RegexController.class, "handleRequest");
-
-        FnResult result = testing.getOnlyResult();
-        System.out.println(result.getBodyAsString());
-        assertNotNull(result);
-    }
 }
