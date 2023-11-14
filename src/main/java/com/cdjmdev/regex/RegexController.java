@@ -1,34 +1,53 @@
 package com.cdjmdev.regex;
 
+import com.cdjmdev.oracle.dao.DAOFactory;
+import com.cdjmdev.oracle.dao.OracleDAOFactory;
+import com.cdjmdev.oracle.exception.UserLimitedException;
 import com.cdjmdev.regex.chatservice.ChatGPTService;
 import com.cdjmdev.regex.chatservice.ChatService;
+import com.cdjmdev.regex.chatservice.UserService;
 import com.cdjmdev.regex.key.OpenAIKey;
 import com.cdjmdev.regex.prompt.ChatGPTPrompt;
 import com.cdjmdev.regex.prompt.Prompt;
-import com.google.gson.Gson;
-import java.util.Map;
 
 public class RegexController {
 
-    private Gson gson;
     private ChatService service;
+    private DAOFactory factory;
+    private UserService userService;
 
     private String str = "Respond with only a syntactically correct regex for the following request. " +
                          "Do not not include any code formatting. " +
                          "If the request is for regex to replace occurrences then " +
                          "just provide the regex to remove and not to replace.";
 
-    public RegexController() {
-        gson = new Gson();
-        Prompt prompt = new ChatGPTPrompt(str);
-        service = new ChatGPTService(new OpenAIKey(), prompt);
+    public static class Query {
+        public String authtoken;
+        public String query;
     }
 
-    public String handleRequest(String input) {
+    public static class QueryResult {
+        public String data;
+    }
 
-        String response = service.getResponse(input);
+    public RegexController() {
+        Prompt prompt = new ChatGPTPrompt(str);
+        service = new ChatGPTService(new OpenAIKey(), prompt);
+        factory = new OracleDAOFactory();
+        userService = new UserService(factory);
+    }
 
-        return gson.toJson(Map.of("data", response));
+    public QueryResult handleRequest(Query query) throws UserLimitedException {
+
+        userService.invokeService(query.authtoken);
+
+        QueryResult result = new QueryResult();
+
+        String response = service.getResponse(query.query);
+
+        result.data = response;
+
+        return result;
     }
 
 }
