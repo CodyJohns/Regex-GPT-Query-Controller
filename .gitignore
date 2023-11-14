@@ -1,3 +1,4 @@
 .idea/
 target/
 .env
+/src/libraries/RegexGPT-DB.jar
