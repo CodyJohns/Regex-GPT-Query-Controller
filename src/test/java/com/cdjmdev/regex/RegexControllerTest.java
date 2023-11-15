@@ -17,7 +17,7 @@ public class RegexControllerTest {
         Gson gson = new Gson();
         RegexController.Query query = new RegexController.Query();
 
-        query.authtoken = "a19cc483fae0a357f68c06add3051272";
+        query.authtoken = "c27afdea0c2d14396b48b533ef61e880";
         query.query = "Give me regex to check the validity of a phone number with dashes";
 
         testing.givenEvent()
