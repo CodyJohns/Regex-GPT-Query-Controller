@@ -6,6 +6,7 @@ import com.cdjmdev.oracle.model.Authtoken;
 import com.cdjmdev.oracle.model.Tiers;
 import com.cdjmdev.oracle.model.User;
 import com.cdjmdev.oracle.util.Utilities;
+import com.cdjmdev.regex.exception.AuthtokenExpiredException;
 
 public class UserService {
 
@@ -15,11 +16,11 @@ public class UserService {
 		this.factory = factory;
 	}
 
-	public void invokeService(String authtoken) throws UserLimitedException {
+	public void invokeService(String authtoken) throws UserLimitedException, AuthtokenExpiredException {
 		Authtoken token = factory.getAuthtokenDAO().getByID(authtoken);
 
 		if(token.isExpired())
-			throw new RuntimeException("Authtoken has expired. Please log in again.");
+			throw new AuthtokenExpiredException("Authtoken has expired. Please log in again.");
 
 		User user = factory.getUserDAO().getByID(token);
 
