@@ -16,7 +16,7 @@ public class UserService {
 		this.factory = factory;
 	}
 
-	public void invokeService(String authtoken) throws UserLimitedException, AuthtokenExpiredException {
+	public User invokeService(String authtoken) throws UserLimitedException, AuthtokenExpiredException {
 		Authtoken token = factory.getAuthtokenDAO().getByID(authtoken);
 
 		if(token.isExpired())
@@ -27,5 +27,7 @@ public class UserService {
 		user.useService();
 
 		factory.getUserDAO().save(user);
+
+		return user;
 	}
 }

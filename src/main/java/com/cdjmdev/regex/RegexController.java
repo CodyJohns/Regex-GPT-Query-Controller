@@ -3,6 +3,8 @@ package com.cdjmdev.regex;
 import com.cdjmdev.oracle.dao.DAOFactory;
 import com.cdjmdev.oracle.dao.OracleDAOFactory;
 import com.cdjmdev.oracle.exception.UserLimitedException;
+import com.cdjmdev.oracle.model.Tiers;
+import com.cdjmdev.oracle.model.User;
 import com.cdjmdev.regex.chatservice.ChatGPTService;
 import com.cdjmdev.regex.chatservice.ChatService;
 import com.cdjmdev.regex.chatservice.UserService;
@@ -29,6 +31,7 @@ public class RegexController {
 
     public static class QueryResult {
         public String regex;
+        public int available_queries;
         public int status = 200;
         public String message;
     }
@@ -45,9 +48,13 @@ public class RegexController {
         QueryResult result = new QueryResult();
 
         try {
-            userService.invokeService(query.authtoken);
+            User user = userService.invokeService(query.authtoken);
 
+            int max_usage = user.tier.equalsIgnoreCase(Tiers.FREE) ? Tiers.MAX_USES_FREE : Tiers.MAX_USES_PAID;
+
+            result.available_queries = max_usage - user.dailyUses;
             result.regex = service.getResponse(query.query);
+            result.message = "Ok";
         } catch(NullPointerException | AuthtokenExpiredException e) {
             result.status = 401;
             result.message = "User is not logged in";
