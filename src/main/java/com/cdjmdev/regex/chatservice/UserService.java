@@ -3,10 +3,8 @@ package com.cdjmdev.regex.chatservice;
 import com.cdjmdev.oracle.dao.DAOFactory;
 import com.cdjmdev.oracle.exception.UserLimitedException;
 import com.cdjmdev.oracle.model.Authtoken;
-import com.cdjmdev.oracle.model.Tiers;
 import com.cdjmdev.oracle.model.User;
-import com.cdjmdev.oracle.util.Utilities;
-import com.cdjmdev.regex.exception.AuthtokenExpiredException;
+import com.cdjmdev.oracle.exception.AuthtokenExpiredException;
 
 public class UserService {
 

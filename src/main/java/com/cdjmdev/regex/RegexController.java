@@ -8,7 +8,7 @@ import com.cdjmdev.oracle.model.User;
 import com.cdjmdev.regex.chatservice.ChatGPTService;
 import com.cdjmdev.regex.chatservice.ChatService;
 import com.cdjmdev.regex.chatservice.UserService;
-import com.cdjmdev.regex.exception.AuthtokenExpiredException;
+import com.cdjmdev.oracle.exception.AuthtokenExpiredException;
 import com.cdjmdev.regex.key.OpenAIKey;
 import com.cdjmdev.regex.prompt.ChatGPTPrompt;
 import com.cdjmdev.regex.prompt.Prompt;
@@ -19,7 +19,8 @@ public class RegexController {
     private DAOFactory factory;
     private UserService userService;
 
-    private String str = "Respond with only a syntactically correct regex for the following request. " +
+    private String str = "Respond with only a syntactically correct regex that will " +
+                         "work in Javascript for the following request. " +
                          "Do not not include any code formatting. " +
                          "If the request is for regex to replace occurrences then " +
                          "just provide the regex to remove and not to replace.";
@@ -48,20 +49,27 @@ public class RegexController {
         QueryResult result = new QueryResult();
 
         try {
+            result.regex = service.getResponse(query.query);
+
             User user = userService.invokeService(query.authtoken);
 
             int max_usage = user.tier.equalsIgnoreCase(Tiers.FREE) ? Tiers.MAX_USES_FREE : Tiers.MAX_USES_PAID;
 
             result.available_queries = max_usage - user.dailyUses;
-            result.regex = service.getResponse(query.query);
             result.message = "Ok";
         } catch(NullPointerException | AuthtokenExpiredException e) {
+            result.regex = null;
             result.status = 401;
             result.message = "User is not logged in";
         } catch(UserLimitedException e) {
+            result.regex = null;
             result.status = 423;
             result.message = "User has reached tier service limits. " +
-                "Please upgrade account to have unlimited access to service.";
+                "Please upgrade account to access to service.";
+        } catch(Exception e) {
+            result.regex = null;
+            result.status = 500;
+            result.message = "Service is unavailable at this time.";
         }
 
         return result;
