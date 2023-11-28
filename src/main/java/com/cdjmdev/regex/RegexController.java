@@ -9,6 +9,7 @@ import com.cdjmdev.regex.chatservice.ChatGPTService;
 import com.cdjmdev.regex.chatservice.ChatService;
 import com.cdjmdev.regex.chatservice.UserService;
 import com.cdjmdev.oracle.exception.AuthtokenExpiredException;
+import com.cdjmdev.regex.exception.ChatMessageTooLargeException;
 import com.cdjmdev.regex.key.OpenAIKey;
 import com.cdjmdev.regex.prompt.ChatGPTPrompt;
 import com.cdjmdev.regex.prompt.Prompt;
@@ -66,6 +67,10 @@ public class RegexController {
             result.status = 423;
             result.message = "User has reached tier service limits. " +
                 "Please upgrade account to access to service.";
+        } catch (ChatMessageTooLargeException e) {
+            result.regex = null;
+            result.status = 500;
+            result.message = e.getMessage();
         } catch(Exception e) {
             result.regex = null;
             result.status = 500;

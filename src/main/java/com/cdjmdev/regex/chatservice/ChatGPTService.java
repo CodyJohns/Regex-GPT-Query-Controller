@@ -1,5 +1,6 @@
 package com.cdjmdev.regex.chatservice;
 
+import com.cdjmdev.regex.exception.ChatMessageTooLargeException;
 import com.cdjmdev.regex.key.ServiceKey;
 import com.cdjmdev.regex.prompt.ChatGPTPrompt;
 import com.cdjmdev.regex.prompt.Prompt;
@@ -22,7 +23,10 @@ public class ChatGPTService implements ChatService {
 		this.prompt = prompt;
 	}
 	@Override
-	public String getResponse(String input) {
+	public String getResponse(String input) throws ChatMessageTooLargeException {
+
+		if(input.length() > 2000)
+			throw new ChatMessageTooLargeException("Request is too large. Try using a more concise request.");
 
 		ChatMessage message = new ChatMessage();
 		message.setRole(SYSTEM);
