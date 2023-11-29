@@ -1,5 +1,7 @@
 package com.cdjmdev.regex.chatservice;
 
+import com.cdjmdev.oracle.model.Tiers;
+import com.cdjmdev.oracle.model.User;
 import com.cdjmdev.regex.exception.ChatMessageTooLargeException;
 import com.cdjmdev.regex.key.ServiceKey;
 import com.cdjmdev.regex.prompt.ChatGPTPrompt;
@@ -23,10 +25,10 @@ public class ChatGPTService implements ChatService {
 		this.prompt = prompt;
 	}
 	@Override
-	public String getResponse(String input) throws ChatMessageTooLargeException {
+	public String getResponse(User user, String input) throws ChatMessageTooLargeException {
 
-		if(input.length() > 2000)
-			throw new ChatMessageTooLargeException("Request is too large. Try using a more concise request.");
+		if(user.tier.equals(Tiers.FREE) && input.length() > 500)
+			throw new ChatMessageTooLargeException("Request is too large. Try using a more concise request or upgrade your account to remove restrictions.");
 
 		ChatMessage message = new ChatMessage();
 		message.setRole(SYSTEM);
