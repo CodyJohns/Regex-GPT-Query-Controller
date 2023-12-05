@@ -19,6 +19,7 @@ public class ChatGPTService implements ChatService {
 	private final String MODEL = "gpt-4-1106-preview";
 	private final String SYSTEM = "system";
 	private final String USER = "user";
+	private final int MAX_FREE_QUERY = 500;
 
 	public ChatGPTService(ServiceKey key, Prompt prompt) {
 		this.service = new OpenAiService(key.getAPIKey());
@@ -27,7 +28,7 @@ public class ChatGPTService implements ChatService {
 	@Override
 	public String getResponse(User user, String input) throws ChatMessageTooLargeException {
 
-		if(user.tier.equals(Tiers.FREE) && input.length() > 500)
+		if(user.tier.equals(Tiers.FREE) && input.length() > MAX_FREE_QUERY)
 			throw new ChatMessageTooLargeException("Request is too large. Try using a more concise request or upgrade your account to remove restrictions.");
 
 		ChatMessage message = new ChatMessage();
