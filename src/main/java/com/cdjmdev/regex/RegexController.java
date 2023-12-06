@@ -61,8 +61,8 @@ public class RegexController {
             result.regex = null;
             result.status = 423;
             result.message = "User has reached tier service limits. " +
-                "Please upgrade account to access to service.";
-        } catch (ChatMessageTooLargeException e) {
+                             "Please upgrade account to access to service.";
+        } catch(ChatMessageTooLargeException e) {
             result.regex = null;
             result.status = 500;
             result.message = e.getMessage();
