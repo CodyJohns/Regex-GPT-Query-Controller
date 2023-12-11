@@ -13,7 +13,6 @@ import com.cdjmdev.regex.exception.ChatMessageTooLargeException;
 import com.fnproject.fn.testing.*;
 import com.google.gson.Gson;
 import org.junit.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.mockito.Mockito;
