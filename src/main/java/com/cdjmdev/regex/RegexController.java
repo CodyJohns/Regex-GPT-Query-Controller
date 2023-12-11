@@ -48,10 +48,9 @@ public class RegexController {
         QueryResult result = new QueryResult();
 
         try {
+            userService.invokeService(query.authtoken, query.query.length());
 
-            User user = userService.invokeService(query.authtoken);
-
-            result.regex = service.getResponse(user, query.query);
+            result.regex = service.getResponse(query.query);
             result.message = "Ok";
         } catch(NullPointerException | AuthtokenExpiredException e) {
             result.regex = null;
