@@ -12,9 +12,11 @@ import com.cdjmdev.regex.chatservice.UserService;
 import com.cdjmdev.regex.exception.ChatMessageTooLargeException;
 import com.fnproject.fn.testing.*;
 import com.google.gson.Gson;
-import org.junit.*;
+import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
@@ -47,13 +49,14 @@ public class RegexControllerTest {
         assertNotNull(result);
     }
 
-    private static DAOFactory mockFactory;
-    private static UserDAO uMock;
-    private static AuthtokenDAO aMock;
+    private DAOFactory mockFactory;
+    private UserDAO uMock;
+    private AuthtokenDAO aMock;
+    private User user;
+    private Authtoken token;
 
-    @Test
-    @DisplayName("Test UserService success")
-    public void testUserService() {
+    @BeforeEach
+    void setup() {
         aMock = mock(AuthtokenDAO.class);
         uMock = mock(UserDAO.class);
 
@@ -62,14 +65,19 @@ public class RegexControllerTest {
         Mockito.when(mockFactory.getUserDAO()).thenReturn(uMock);
         Mockito.when(mockFactory.getAuthtokenDAO()).thenReturn(aMock);
 
-        User user = new User("", "", "", "");
-        Authtoken token = new Authtoken();
+        user = new User("", "", "", "");
+        token = new Authtoken();
         token.user_id = user.id;
         token.expires = Utilities.getFutureTimestamp();
         token.id = "";
 
         Mockito.when(aMock.getByID(Mockito.any())).thenReturn(token);
         Mockito.when(uMock.getByID(Mockito.any())).thenReturn(user);
+    }
+
+    @Test
+    @DisplayName("Test UserService success")
+    public void testUserService() {
 
         UserService service = new UserService(mockFactory);
 
@@ -81,22 +89,7 @@ public class RegexControllerTest {
     @Test
     @DisplayName("Test UserService token expired")
     public void testTokenExpired() {
-        aMock = mock(AuthtokenDAO.class);
-        uMock = mock(UserDAO.class);
-
-        mockFactory = mock(DAOFactory.class);
-
-        Mockito.when(mockFactory.getUserDAO()).thenReturn(uMock);
-        Mockito.when(mockFactory.getAuthtokenDAO()).thenReturn(aMock);
-
-        User user = new User("", "", "", "");
-        Authtoken token = new Authtoken();
-        token.user_id = user.id;
         token.expires = 0;
-        token.id = "";
-
-        Mockito.when(aMock.getByID(Mockito.any())).thenReturn(token);
-        Mockito.when(uMock.getByID(Mockito.any())).thenReturn(user);
 
         UserService service = new UserService(mockFactory);
 
@@ -108,22 +101,6 @@ public class RegexControllerTest {
     @Test
     @DisplayName("Test UserService request too big")
     public void testRequestMassive() {
-        aMock = mock(AuthtokenDAO.class);
-        uMock = mock(UserDAO.class);
-
-        mockFactory = mock(DAOFactory.class);
-
-        Mockito.when(mockFactory.getUserDAO()).thenReturn(uMock);
-        Mockito.when(mockFactory.getAuthtokenDAO()).thenReturn(aMock);
-
-        User user = new User("", "", "", "");
-        Authtoken token = new Authtoken();
-        token.user_id = user.id;
-        token.expires = Utilities.getFutureTimestamp();
-        token.id = "";
-
-        Mockito.when(aMock.getByID(Mockito.any())).thenReturn(token);
-        Mockito.when(uMock.getByID(Mockito.any())).thenReturn(user);
 
         UserService service = new UserService(mockFactory);
 
@@ -135,25 +112,8 @@ public class RegexControllerTest {
     @Test
     @DisplayName("Test UserService user reached service cap")
     public void testUserLimited() {
-        aMock = mock(AuthtokenDAO.class);
-        uMock = mock(UserDAO.class);
-
-        mockFactory = mock(DAOFactory.class);
-
-        Mockito.when(mockFactory.getUserDAO()).thenReturn(uMock);
-        Mockito.when(mockFactory.getAuthtokenDAO()).thenReturn(aMock);
-
-        User user = new User("", "", "", "");
         user.lastUse = Utilities.getCurrentTimestamp();
         user.dailyUses = 10;
-
-        Authtoken token = new Authtoken();
-        token.user_id = user.id;
-        token.expires = Utilities.getFutureTimestamp();
-        token.id = "";
-
-        Mockito.when(aMock.getByID(Mockito.any())).thenReturn(token);
-        Mockito.when(uMock.getByID(Mockito.any())).thenReturn(user);
 
         UserService service = new UserService(mockFactory);
 
@@ -165,25 +125,8 @@ public class RegexControllerTest {
     @Test
     @DisplayName("Test UserService user reached service cap but on new day")
     public void testUserLimitedNewDay() {
-        aMock = mock(AuthtokenDAO.class);
-        uMock = mock(UserDAO.class);
-
-        mockFactory = mock(DAOFactory.class);
-
-        Mockito.when(mockFactory.getUserDAO()).thenReturn(uMock);
-        Mockito.when(mockFactory.getAuthtokenDAO()).thenReturn(aMock);
-
-        User user = new User("", "", "", "");
         user.lastUse = 0;
         user.dailyUses = 10;
-
-        Authtoken token = new Authtoken();
-        token.user_id = user.id;
-        token.expires = Utilities.getFutureTimestamp();
-        token.id = "";
-
-        Mockito.when(aMock.getByID(Mockito.any())).thenReturn(token);
-        Mockito.when(uMock.getByID(Mockito.any())).thenReturn(user);
 
         UserService service = new UserService(mockFactory);
 
