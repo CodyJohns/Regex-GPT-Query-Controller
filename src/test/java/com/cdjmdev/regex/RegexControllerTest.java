@@ -110,6 +110,17 @@ public class RegexControllerTest {
     }
 
     @Test
+    @DisplayName("Test UserService request is empty")
+    public void testRequestBlank() {
+
+        UserService service = new UserService(mockFactory);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.invokeService(token.id, 0);
+        });
+    }
+
+    @Test
     @DisplayName("Test UserService user reached service cap")
     public void testUserLimited() {
         user.lastUse = Utilities.getCurrentTimestamp();

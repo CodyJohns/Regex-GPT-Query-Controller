@@ -52,6 +52,10 @@ public class RegexController {
 
             result.regex = service.getResponse(query.query);
             result.message = "Ok";
+        } catch(IllegalArgumentException e) {
+            result.regex = null;
+            result.status = 400;
+            result.message = e.getMessage();
         } catch(NullPointerException | AuthtokenExpiredException e) {
             result.regex = null;
             result.status = 401;

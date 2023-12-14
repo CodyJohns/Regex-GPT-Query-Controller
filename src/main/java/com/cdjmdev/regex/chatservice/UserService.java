@@ -19,6 +19,9 @@ public class UserService {
 
 	public User invokeService(String authtoken, int requestSize) throws UserLimitedException, AuthtokenExpiredException, ChatMessageTooLargeException {
 
+		if(requestSize == 0)
+			throw new IllegalArgumentException("Request is empty.");
+
 		Authtoken token = factory.getAuthtokenDAO().getByID(authtoken);
 
 		if(token.isExpired())
