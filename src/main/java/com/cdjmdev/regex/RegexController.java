@@ -38,8 +38,8 @@ public class RegexController {
 
     public RegexController() {
         Prompt prompt = new ChatGPTPrompt(str);
-        service = new ChatGPTService(new OpenAIKey(), prompt);
         factory = new OracleDAOFactory();
+        service = new ChatGPTService(factory, new OpenAIKey(), prompt);
         userService = new UserService(factory);
     }
 
@@ -48,9 +48,9 @@ public class RegexController {
         QueryResult result = new QueryResult();
 
         try {
-            userService.invokeService(query.authtoken, query.query.length());
+            User user = userService.invokeService(query.authtoken, query.query.length());
 
-            result.regex = service.getResponse(query.query);
+            result.regex = service.getResponse(user, query.query);
             result.message = "Ok";
         } catch(IllegalArgumentException e) {
             result.regex = null;
