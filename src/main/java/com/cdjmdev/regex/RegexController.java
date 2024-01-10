@@ -23,7 +23,8 @@ public class RegexController {
                          "work in Javascript for the following request. " +
                          "Do not not include any code formatting. " +
                          "If the request is for regex to replace occurrences then " +
-                         "just provide the regex to remove and not to replace.";
+                         "just provide the regex to remove and not to replace but without " +
+                         "the global flag and without forward and back slashes.";
 
     public static class Query {
         public String authtoken;
