@@ -21,7 +21,7 @@ public class RegexController {
 
     private String str = "Respond with only a syntactically correct regex that will " +
                          "work in Javascript for the following request. " +
-                         "Do not not include any code formatting. " +
+                         "Do not not include any code formatting or forward and back slashes. " +
                          "If the request is for regex to replace occurrences then " +
                          "just provide the regex to remove and not to replace but without " +
                          "the global flag and without forward and back slashes.";
