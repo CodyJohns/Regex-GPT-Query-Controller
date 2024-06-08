@@ -3,3 +3,4 @@ target/
 .env
 /src/libraries/RegexGPT-DB.jar
 /src/main/java/com/cdjmdev/oracle/
+.DS_Store
