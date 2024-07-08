@@ -7,6 +7,7 @@ public class ChatGPTPrompt implements Prompt {
 	public ChatGPTPrompt(String prompt) {
 		this.prompt = prompt;
 	}
+	
 	@Override
 	public String getPrompt() {
 		return prompt;
