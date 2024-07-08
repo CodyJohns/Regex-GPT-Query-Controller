@@ -19,7 +19,7 @@ public class RegexController {
     private DAOFactory factory;
     private UserService userService;
 
-    private String str = "Respond with only a syntactically correct regex that will " +
+    private String prompt_text = "Respond with only a syntactically correct regex that will " +
                          "work in Javascript for the following request. " +
                          "Do not not include any code formatting or forward and back slashes. " +
                          "If the request is for regex to replace occurrences then " +
@@ -38,7 +38,7 @@ public class RegexController {
     }
 
     public RegexController() {
-        Prompt prompt = new ChatGPTPrompt(str);
+        Prompt prompt = new ChatGPTPrompt(prompt_text);
         factory = new OracleDAOFactory();
         service = new ChatGPTService(factory, new OpenAIKey(), prompt);
         userService = new UserService(factory);
@@ -65,7 +65,7 @@ public class RegexController {
             result.regex = null;
             result.status = 423;
             result.message = "User has reached tier service limits. " +
-                             "Please upgrade account to access to service.";
+                             "Please upgrade account to access service.";
         } catch(ChatMessageTooLargeException e) {
             result.regex = null;
             result.status = 500;
